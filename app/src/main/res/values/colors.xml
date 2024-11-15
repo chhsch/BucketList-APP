@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="progress_note_color">#ADD8E6</color> <!-- Green -->
+    <color name="paused_note_color">#DEB887</color> <!-- Orange -->
+    <color name="completed_note_color">#8FBC8F</color> <!-- Blue -->
+    <color name="material_dynamic_neutral50">#FAFAFA</color> <!-- Use your preferred color here -->
+
+
+</resources>
