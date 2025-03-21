@@ -7,23 +7,28 @@ trigger:
   - main
 
 pool:
-  vmImage: 'macos-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   sdkVersion: '30'
 
 steps:
-- task: UseJava@1
-  inputs:
-    versionSpec: '11'
+# Install Java manually (replace UseJava task)
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y openjdk-11-jdk
+  displayName: 'Install Java 11'
 
+# Install Android SDK components
 - script: |
     yes | sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
   displayName: 'Install Android SDK'
 
+# Make gradlew executable
 - script: chmod +x ./gradlew
   displayName: 'Make gradlew executable'
 
+# Build the APK
 - task: Gradle@2
   inputs:
     gradleWrapperFile: './gradlew'
@@ -31,6 +36,7 @@ steps:
     options: '--stacktrace'
     publishJUnitResults: false
 
+# Run Espresso UI Tests
 - task: Gradle@2
   inputs:
     gradleWrapperFile: './gradlew'
@@ -39,11 +45,13 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/build/test-results/**/*.xml'
 
+# Copy APK to artifacts directory
 - task: CopyFiles@2
   inputs:
     contents: '**/*.apk'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
 
+# Publish APK as pipeline artifact
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
