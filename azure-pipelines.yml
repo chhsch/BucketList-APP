@@ -21,12 +21,13 @@ steps:
     sudo apt-get install -y openjdk-11-jdk unzip curl
   displayName: 'Install Java and tools'
 
-# ✅ Download & install Android command line tools
+# ✅ Download & install Android command line tools correctly
 - script: |
     mkdir -p $HOME/android-sdk/cmdline-tools
     cd $HOME/android-sdk/cmdline-tools
     curl -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-    unzip tools.zip -d latest
+    unzip tools.zip
+    mv cmdline-tools latest
     export ANDROID_HOME=$HOME/android-sdk
     export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
     yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME \
