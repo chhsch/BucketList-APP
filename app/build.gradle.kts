@@ -1,8 +1,8 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.devtools.ksp)
-    alias(libs.plugins.androidx.navigation)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -33,64 +33,53 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         viewBinding = true
     }
+
     @Suppress("UnstableApiUsage")
     testOptions {
         animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
-
 }
 
 dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
-    // Project 2:
-    implementation(libs.androidx.lifecycle.viewmodel)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.espresso.contrib)
-    debugImplementation(libs.androidx.fragment.testing)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
 
-    implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
+    debugImplementation("androidx.fragment:fragment-testing:1.6.2")
+    implementation("androidx.test.espresso:espresso-contrib:3.5.1")
 
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestUtil(libs.androidx.orchestrator)
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.androidx.espresso.intents)
-
-/*
-    NOTE: The following two dependencies are required for the first section of
-    BNRG Chapter 12 (called "An Introduction to Asynchronous Code on Android") which ends
-    just before the "Creating a Database" section.
-
-    You don't need to uncomment these for Project 2, but please copy them to your CriminalIntent
-    project, so that you may follow along with the textbook tutorial regarding coroutines:
-
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
-*/
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestUtil("androidx.test:orchestrator:1.4.2")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.6")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("junit:junit:4.13.2")
 }
