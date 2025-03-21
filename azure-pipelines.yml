@@ -34,15 +34,15 @@ variables:
 #   displayName: 'Install Android SDK components'
 
 
-# # ✅ Set Android SDK env vars globally
-# - script: |
-#     echo "##vso[task.setvariable variable=ANDROID_HOME]$HOME/android-sdk"
-#     echo "##vso[task.setvariable variable=PATH]$HOME/android-sdk/platform-tools:$HOME/android-sdk/cmdline-tools/latest/bin:$PATH"
-#   displayName: 'Set ANDROID_HOME and PATH'
+# ✅ Set Android SDK env vars globally
+- script: |
+    echo "##vso[task.setvariable variable=ANDROID_HOME]$HOME/android-sdk"
+    echo "##vso[task.setvariable variable=PATH]$HOME/android-sdk/platform-tools:$HOME/android-sdk/cmdline-tools/latest/bin:$PATH"
+  displayName: 'Set ANDROID_HOME and PATH'
 
-# # ✅ Make gradlew executable
-# - script: chmod +x ./gradlew
-#   displayName: 'Make gradlew executable'
+# ✅ Make gradlew executable
+- script: chmod +x ./gradlew
+  displayName: 'Make gradlew executable'
 
 # ✅ Build APK
 - task: Gradle@2
