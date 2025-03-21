@@ -11,36 +11,39 @@ pool:
 
 variables:
   sdkVersion: '30'
+  buildToolsVersion: '30.0.3'
+  androidHome: '$(HOME)/android-sdk'
 
 steps:
-# Install Java manually (replace UseJava task)
+# ✅ Install Java 11 manually
 - script: |
     sudo apt-get update
-    sudo apt-get install -y openjdk-11-jdk
-  displayName: 'Install Java 11'
+    sudo apt-get install -y openjdk-11-jdk unzip curl
+  displayName: 'Install Java and tools'
 
-# Download & Install Android SDK Command-line Tools
+# ✅ Download & install Android command line tools
 - script: |
     mkdir -p $HOME/android-sdk/cmdline-tools
     cd $HOME/android-sdk/cmdline-tools
-    curl -O https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-    unzip commandlinetools-linux-9477386_latest.zip -d latest
+    curl -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+    unzip tools.zip -d latest
     export ANDROID_HOME=$HOME/android-sdk
     export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-    yes | sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-30" "build-tools;30.0.3"
-  displayName: 'Install Android SDK'
+    yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME \
+      "platform-tools" "platforms;android-${sdkVersion}" "build-tools;${buildToolsVersion}"
+  displayName: 'Install Android SDK components'
 
-# Set Android environment variables globally
+# ✅ Set Android SDK env vars globally
 - script: |
     echo "##vso[task.setvariable variable=ANDROID_HOME]$HOME/android-sdk"
-    echo "##vso[task.setvariable variable=PATH]$HOME/android-sdk/platform-tools:$PATH"
-  displayName: 'Set Android SDK Environment Vars'
-  
-# Make gradlew executable
+    echo "##vso[task.setvariable variable=PATH]$HOME/android-sdk/platform-tools:$HOME/android-sdk/cmdline-tools/latest/bin:$PATH"
+  displayName: 'Set ANDROID_HOME and PATH'
+
+# ✅ Make gradlew executable
 - script: chmod +x ./gradlew
   displayName: 'Make gradlew executable'
 
-# Build the APK
+# ✅ Build APK
 - task: Gradle@2
   inputs:
     gradleWrapperFile: './gradlew'
@@ -48,7 +51,7 @@ steps:
     options: '--stacktrace'
     publishJUnitResults: false
 
-# Run Espresso UI Tests
+# ✅ Run Espresso UI Tests
 - task: Gradle@2
   inputs:
     gradleWrapperFile: './gradlew'
@@ -57,13 +60,13 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/build/test-results/**/*.xml'
 
-# Copy APK to artifacts directory
+# ✅ Copy APK to artifacts directory
 - task: CopyFiles@2
   inputs:
     contents: '**/*.apk'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
 
-# Publish APK as pipeline artifact
+# ✅ Publish APK as artifact
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
