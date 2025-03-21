@@ -21,7 +21,6 @@ steps:
     sudo apt-get install -y openjdk-11-jdk unzip curl
   displayName: 'Install Java and tools'
 
-# ✅ Download & install Android command line tools correctly
 - script: |
     mkdir -p $HOME/android-sdk/cmdline-tools
     cd $HOME/android-sdk/cmdline-tools
@@ -31,8 +30,9 @@ steps:
     export ANDROID_HOME=$HOME/android-sdk
     export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
     yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME \
-      "platform-tools" "platforms;android-${sdkVersion}" "build-tools;${buildToolsVersion}"
+      "platform-tools" "platforms;android-30" "build-tools;30.0.3"
   displayName: 'Install Android SDK components'
+
 
 # ✅ Set Android SDK env vars globally
 - script: |
