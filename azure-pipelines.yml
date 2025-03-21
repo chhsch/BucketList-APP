@@ -1,0 +1,50 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  - main
+
+pool:
+  vmImage: 'macos-latest'
+
+variables:
+  sdkVersion: '30'
+
+steps:
+- task: UseJava@1
+  inputs:
+    versionSpec: '11'
+
+- script: |
+    yes | sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
+  displayName: 'Install Android SDK'
+
+- script: chmod +x ./gradlew
+  displayName: 'Make gradlew executable'
+
+- task: Gradle@2
+  inputs:
+    gradleWrapperFile: './gradlew'
+    tasks: 'assembleDebug'
+    options: '--stacktrace'
+    publishJUnitResults: false
+
+- task: Gradle@2
+  inputs:
+    gradleWrapperFile: './gradlew'
+    tasks: 'connectedDebugAndroidTest'
+    options: '--stacktrace'
+    publishJUnitResults: true
+    testResultsFiles: '**/build/test-results/**/*.xml'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '**/*.apk'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'APK'
