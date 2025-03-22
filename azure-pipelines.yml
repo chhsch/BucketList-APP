@@ -31,7 +31,7 @@ steps:
     export ANDROID_HOME=$HOME/android-sdk
     export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
     yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME \
-      "platform-tools" "platforms;android-30" "build-tools:30.0.3"
+      "platform-tools" "platforms;android-30" "build-tools;30.0.3"
   displayName: 'Install Android SDK components'
 
 # ✅ Set Android SDK env vars globally
