@@ -1,8 +1,8 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.devtools.ksp)
-    alias(libs.plugins.androidx.navigation)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -33,16 +33,20 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         viewBinding = true
     }
+
     @Suppress("UnstableApiUsage")
     testOptions {
         animationsDisabled = true
@@ -51,42 +55,41 @@ android {
             isIncludeAndroidResources = true
         }
     }
-
 }
 
 dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
-    // Project 2:
-    implementation(libs.androidx.lifecycle.viewmodel)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.espresso.contrib)
-    debugImplementation(libs.androidx.fragment.testing)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
 
-    implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
+    debugImplementation("androidx.fragment:fragment-testing:1.6.2")
+    implementation("androidx.test.espresso:espresso-contrib:3.5.1")
 
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestUtil(libs.androidx.orchestrator)
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.androidx.espresso.intents)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
 
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestUtil("androidx.test:orchestrator:1.4.2")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.6")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
 
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.kotlinx.coroutines.core)
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.13.7")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
-}
