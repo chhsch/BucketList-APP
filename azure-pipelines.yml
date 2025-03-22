@@ -40,8 +40,10 @@ steps:
 
 - script: |
     echo "##vso[task.setvariable variable=ANDROID_HOME]$HOME/android-sdk"
+    echo "##vso[task.setvariable variable=ANDROID_SDK_ROOT]$HOME/android-sdk"
     echo "##vso[task.setvariable variable=PATH]$HOME/android-sdk/platform-tools:$HOME/android-sdk/cmdline-tools/latest/bin:$PATH"
-  displayName: 'Set ANDROID_HOME & PATH'
+  displayName: 'Set ANDROID_HOME, ANDROID_SDK_ROOT & PATH'
+
 
 - script: chmod +x ./gradlew
   displayName: 'Make gradlew executable'
