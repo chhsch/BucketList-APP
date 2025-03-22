@@ -47,6 +47,9 @@ android {
     testOptions {
         animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        unitTests {
+            isIncludeAndroidResources = true
+        }
     }
 
 }
@@ -78,19 +81,12 @@ dependencies {
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.espresso.intents)
 
-/*
-    NOTE: The following two dependencies are required for the first section of
-    BNRG Chapter 12 (called "An Introduction to Asynchronous Code on Android") which ends
-    just before the "Creating a Database" section.
 
-    You don't need to uncomment these for Project 2, but please copy them to your CriminalIntent
-    project, so that you may follow along with the textbook tutorial regarding coroutines:
-
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
-*/
-
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.kotlinx.coroutines.core)
+
 }
