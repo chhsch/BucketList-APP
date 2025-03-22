@@ -15,61 +15,77 @@ variables:
   androidHome: '$(HOME)/android-sdk'
 
 steps:
+
+# ✅ Install Java 17 and set JAVA_HOME
 - script: |
     sudo apt-get update
     sudo apt-get install -y openjdk-17-jdk unzip curl
-  displayName: 'Install Java 17'
+    export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+    echo "##vso[task.setvariable variable=JAVA_HOME]$JAVA_HOME"
+    echo "##vso[task.setvariable variable=PATH]$JAVA_HOME/bin:$PATH"
+  displayName: 'Install and set Java 17'
 
-- script: |
-    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-    echo "##vso[task.setvariable variable=JAVA_HOME]/usr/lib/jvm/java-17-openjdk-amd64"
-    echo "##vso[task.setvariable variable=PATH]/usr/lib/jvm/java-17-openjdk-amd64/bin:$PATH"
-  displayName: 'Set JAVA_HOME to Java 17'
-
+# ✅ Install Android SDK and required tools
 - script: |
     mkdir -p $HOME/android-sdk/cmdline-tools
     cd $HOME/android-sdk/cmdline-tools
-    curl -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-    unzip tools.zip
+    curl -sS -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+    unzip -q tools.zip
     mv cmdline-tools latest
     export ANDROID_HOME=$HOME/android-sdk
     export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
     yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME \
-      "platform-tools" "platforms;android-30" "build-tools;30.0.3"
-  displayName: 'Install Android SDK'
+      "platform-tools" "platforms;android-${{ variables.sdkVersion }}" "build-tools;${{ variables.buildToolsVersion }}"
+  displayName: 'Install Android SDK components'
 
+# ✅ Set Android environment variables globally
 - script: |
     echo "##vso[task.setvariable variable=ANDROID_HOME]$HOME/android-sdk"
     echo "##vso[task.setvariable variable=ANDROID_SDK_ROOT]$HOME/android-sdk"
     echo "##vso[task.setvariable variable=PATH]$HOME/android-sdk/platform-tools:$HOME/android-sdk/cmdline-tools/latest/bin:$PATH"
-  displayName: 'Set ANDROID_HOME, ANDROID_SDK_ROOT & PATH'
+  displayName: 'Set Android SDK environment variables'
 
-
+# ✅ Make gradlew executable
 - script: chmod +x ./gradlew
   displayName: 'Make gradlew executable'
 
-
-- task: Gradle@2
+# ✅ Optional: Cache Gradle dependencies
+- task: Cache@2
   inputs:
+    key: 'gradle | "$(Agent.OS)" | **/gradle-wrapper.properties'
+    path: ~/.gradle
+  displayName: 'Cache Gradle'
+
+# ✅ Build APK
+- task: Gradle@3
+  inputs:
+    workingDirectory: ''
     gradleWrapperFile: 'gradlew'
     tasks: ':app:assembleDebug'
     options: '--stacktrace --info --warning-mode all'
     publishJUnitResults: false
 
-- task: Gradle@2
+# ✅ Run Espresso UI Tests (if you have devices/emulators)
+- task: Gradle@3
   inputs:
+    workingDirectory: ''
     gradleWrapperFile: 'gradlew'
     tasks: ':app:connectedDebugAndroidTest'
     options: '--stacktrace'
     publishJUnitResults: true
     testResultsFiles: '**/build/test-results/**/*.xml'
 
+# ✅ Copy APK to artifacts directory
 - task: CopyFiles@2
   inputs:
     contents: '**/*.apk'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy APKs to artifacts'
 
+# ✅ Publish APK artifact
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'APK'
+    publishLocation: 'Container'
+  displayName: 'Publish APK Artifact'
