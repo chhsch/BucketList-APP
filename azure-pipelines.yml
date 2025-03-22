@@ -15,12 +15,13 @@ variables:
   androidHome: '$(HOME)/android-sdk'
 
 steps:
-# ✅ Install Java 11 manually
+# ✅ Install Java 17 manually (revised from Java 11)
 - script: |
     sudo apt-get update
-    sudo apt-get install -y openjdk-11-jdk unzip curl
-  displayName: 'Install Java and tools'
+    sudo apt-get install -y openjdk-17-jdk unzip curl
+  displayName: 'Install Java 17 and tools'
 
+# ✅ Install Android SDK command-line tools
 - script: |
     mkdir -p $HOME/android-sdk/cmdline-tools
     cd $HOME/android-sdk/cmdline-tools
@@ -30,9 +31,8 @@ steps:
     export ANDROID_HOME=$HOME/android-sdk
     export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
     yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME \
-      "platform-tools" "platforms;android-30" "build-tools;30.0.3"
+      "platform-tools" "platforms;android-30" "build-tools:30.0.3"
   displayName: 'Install Android SDK components'
-
 
 # ✅ Set Android SDK env vars globally
 - script: |
@@ -44,19 +44,12 @@ steps:
 - script: chmod +x ./gradlew
   displayName: 'Make gradlew executable'
 
-- task: JavaToolInstaller@0
-  inputs:
-    versionSpec: '11'
-    jdkArchitectureOption: 'x64'
-    jdkSourceOption: 'PreInstalled'
-    
 # ✅ Build APK
 - task: Gradle@2
   inputs:
     gradleWrapperFile: './gradlew'
     tasks: 'assembleDebug'
     options: '--stacktrace --info --warning-mode all'
-    # publishJUnitResults: false
 
 # ✅ Run Espresso UI Tests
 - task: Gradle@2
