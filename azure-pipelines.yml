@@ -66,14 +66,24 @@ steps:
     publishJUnitResults: false
 
 # ✅ Run Espresso UI Tests (if you have devices/emulators)
+# - task: Gradle@3
+#   inputs:
+#     workingDirectory: ''
+#     gradleWrapperFile: 'gradlew'
+#     tasks: ':app:connectedDebugAndroidTest'
+#     options: '--stacktrace'
+#     publishJUnitResults: true
+#     testResultsFiles: '**/build/test-results/**/*.xml'
+
 - task: Gradle@3
   inputs:
-    workingDirectory: ''
     gradleWrapperFile: 'gradlew'
-    tasks: ':app:connectedDebugAndroidTest'
+    tasks: 'testDebugUnitTest'
     options: '--stacktrace'
     publishJUnitResults: true
-    testResultsFiles: '**/build/test-results/**/*.xml'
+    testResultsFiles: '**/build/test-results/testDebugUnitTest/*.xml'
+  displayName: 'Run Unit Tests'
+
 
 # ✅ Copy APK to artifacts directory
 - task: CopyFiles@2
