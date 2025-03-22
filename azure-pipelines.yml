@@ -48,6 +48,17 @@ steps:
 - script: chmod +x ./gradlew
   displayName: 'Make gradlew executable'
 
+# ✅ Create and launch Android emulator
+- script: |
+    echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "system-images;android-30;google_apis;x86_64"
+    echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --force
+    nohup $ANDROID_HOME/emulator/emulator -avd test -no-snapshot -noaudio -no-window -gpu swiftshader_indirect > /dev/null 2>&1 &
+    echo "Waiting for emulator to start..."
+    $ANDROID_HOME/platform-tools/adb wait-for-device
+    $ANDROID_HOME/platform-tools/adb shell input keyevent 82
+  displayName: 'Create and start Android Emulator'
+
+  
 - task: Gradle@2
   inputs:
     gradleWrapperFile: 'gradlew'
