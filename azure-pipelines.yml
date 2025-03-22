@@ -44,12 +44,12 @@ steps:
 - script: chmod +x ./gradlew
   displayName: 'Make gradlew executable'
 
-  - task: JavaToolInstaller@0
+- task: JavaToolInstaller@0
   inputs:
     versionSpec: '11'
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'PreInstalled'
-
+    
 # ✅ Build APK
 - task: Gradle@2
   inputs:
