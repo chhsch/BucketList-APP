@@ -99,3 +99,19 @@ steps:
     artifactName: 'APK'
     publishLocation: 'Container'
   displayName: 'Publish APK Artifact'
+
+# ✅ Upload APK to Firebase App Distribution
+- task: DownloadSecureFile@1
+  name: downloadFirebaseCreds
+  inputs:
+    secureFile: 'service-account.json'
+
+- script: |
+    npm install -g firebase-tools
+    firebase login:ci --no-localhost
+    firebase appdistribution:distribute $(Build.ArtifactStagingDirectory)/*.apk \
+      --app $(FIREBASE_APP_ID) \
+      --release-notes "New build from CI/CD Pipeline" \
+      --testers "$(TESTER_EMAILS)" \
+      --token "$(FIREBASE_TOKEN)"
+  displayName: 'Distribute APK via Firebase'
