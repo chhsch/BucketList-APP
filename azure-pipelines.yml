@@ -109,10 +109,9 @@ steps:
 - script: |
     npm install -g firebase-tools
     export GOOGLE_APPLICATION_CREDENTIALS="$(Agent.TempDirectory)/$(downloadFirebaseCreds.secureFilePath)"
-    firebase appdistribution:distribute $(Build.ArtifactStagingDirectory)/*.apk \
+    firebase appdistribution:distribute app/build/outputs/apk/debug/app-debug.apk \
       --app "$(FIREBASE_APP_ID)" \
-      --release-notes "CI/CD build deployed via Azure DevOps" \
-      --testers "$(TESTER_EMAILS)" \
-      --token "$(FIREBASE_TOKEN)"
+      --release-notes "New build from Azure DevOps CI/CD pipeline" \
+      --testers "$(TESTER_EMAILS)"
   displayName: 'Distribute APK via Firebase'
 
