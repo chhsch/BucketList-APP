@@ -46,4 +46,4 @@ The **BucketList App** is your ultimate companion for capturing, organizing, and
 - Attach photos to goals to capture milestones and preserve memories.  
 - View photos in the detail screen with a click-to-zoom feature for immersive visual storytelling.
 
-📄 [CI/CD Setup Guide →](docs/pipeline-setup.md)
+📄 [CI/CD Setup Guide](docs/pipeline-setup.md)
