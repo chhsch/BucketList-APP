@@ -48,16 +48,31 @@ azure-pipelines.yml    → Pipeline definition file
 6. Copy APK to artifacts directory
 7. Distribute APK to Firebase App Distribution
 
+<div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+  <img src="https://github.com/chhsch/BucketList-APP/blob/4cbfcc806b679cc0843b804e29e0d0a609e73322/img/pipeline.png" alt="Screenshot 1" width="800" heigh= "400"/>
+</div>
+
 ## Firebase CD Notes
 - Make sure `GOOGLE_APPLICATION_CREDENTIALS` is exported to point to the service account file path.
 - `--token` is deprecated but still temporarily supported.
 - Firebase CLI uses `.apk` from `app/build/outputs/apk/debug/app-debug.apk`.
+
+<div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+  <img src="https://github.com/chhsch/BucketList-APP/blob/4cbfcc806b679cc0843b804e29e0d0a609e73322/img/Firebase.png" width="800" heigh= "400"/>
+</div>
+
+
 
 ## For Testers
 Testers will receive an email invite from Firebase.
 They must:
 - Log in with the email used in `TESTER_EMAILS`
 - Click the invite link to download & install the APK
+
+<div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+  <img src="https://github.com/chhsch/BucketList-APP/blob/4cbfcc806b679cc0843b804e29e0d0a609e73322/img/tester.png" width="400" heigh= "200"/>
+</div>
+
 
 ---
 ## 🔗 References
