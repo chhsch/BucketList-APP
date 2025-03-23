@@ -2,13 +2,13 @@
 
 This document outlines the full CI/CD process for the **BucketList Android App** using **Azure DevOps** and **Firebase App Distribution**.
 
-## 📦 Pipeline Overview
+## Pipeline Overview
 This CI/CD setup includes:
 - ✅ Gradle build automation
 - ✅ Unit test execution (JUnit + MockK)
 - ✅ Firebase App Distribution delivery
 
-## 📁 Folder Structure
+## Folder Structure
 ```
 app/
 ├── src/
@@ -18,7 +18,7 @@ app/
 azure-pipelines.yml    → Pipeline definition file
 ```
 
-## ⚙ Prerequisites
+## Prerequisites
 
 ### 1. Firebase Project Setup
 - Create a Firebase project: https://console.firebase.google.com
@@ -38,7 +38,7 @@ azure-pipelines.yml    → Pipeline definition file
 | `FIREBASE_TOKEN`   | (generated via `firebase login:ci`)      | ✅ Yes |
 | `TESTER_EMAILS`    | you@example.com,tester@example.com       | ❌ No  |
 
-## 🔁 Pipeline Steps Summary
+## Pipeline Steps Summary
 
 1. Trigger on `main` branch push
 2. Install Java 17 and Android SDK
@@ -48,12 +48,12 @@ azure-pipelines.yml    → Pipeline definition file
 6. Copy APK to artifacts directory
 7. Distribute APK to Firebase App Distribution
 
-## 💡 Firebase CD Notes
+## Firebase CD Notes
 - Make sure `GOOGLE_APPLICATION_CREDENTIALS` is exported to point to the service account file path.
 - `--token` is deprecated but still temporarily supported.
 - Firebase CLI uses `.apk` from `app/build/outputs/apk/debug/app-debug.apk`.
 
-## 📩 For Testers
+## For Testers
 Testers will receive an email invite from Firebase.
 They must:
 - Log in with the email used in `TESTER_EMAILS`
