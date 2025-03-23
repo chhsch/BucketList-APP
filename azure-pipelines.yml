@@ -1,7 +1,4 @@
 # Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
 
 trigger:
   - main
@@ -16,7 +13,7 @@ variables:
 
 steps:
 
-# ✅ Install Java 17 and set JAVA_HOME
+# Install Java 17 and set JAVA_HOME
 - script: |
     sudo apt-get update
     sudo apt-get install -y openjdk-17-jdk unzip curl
@@ -25,7 +22,7 @@ steps:
     echo "##vso[task.setvariable variable=PATH]$JAVA_HOME/bin:$PATH"
   displayName: 'Install and set Java 17'
 
-# ✅ Install Android SDK and required tools
+# Install Android SDK and required tools
 - script: |
     mkdir -p $HOME/android-sdk/cmdline-tools
     cd $HOME/android-sdk/cmdline-tools
@@ -38,25 +35,25 @@ steps:
       "platform-tools" "platforms;android-${{ variables.sdkVersion }}" "build-tools;${{ variables.buildToolsVersion }}"
   displayName: 'Install Android SDK components'
 
-# ✅ Set Android environment variables globally
+# Set Android environment variables globally
 - script: |
     echo "##vso[task.setvariable variable=ANDROID_HOME]$HOME/android-sdk"
     echo "##vso[task.setvariable variable=ANDROID_SDK_ROOT]$HOME/android-sdk"
     echo "##vso[task.setvariable variable=PATH]$HOME/android-sdk/platform-tools:$HOME/android-sdk/cmdline-tools/latest/bin:$PATH"
   displayName: 'Set Android SDK environment variables'
 
-# ✅ Make gradlew executable
+# Make gradlew executable
 - script: chmod +x ./gradlew
   displayName: 'Make gradlew executable'
 
-# ✅ Optional: Cache Gradle dependencies
+# Optional: Cache Gradle dependencies
 - task: Cache@2
   inputs:
     key: 'gradle | "$(Agent.OS)" | **/gradle-wrapper.properties'
     path: $(HOME)/.gradle
   displayName: 'Cache Gradle'
 
-# ✅ Build APK
+# Build APK
 - task: Gradle@3
   inputs:
     workingDirectory: ''
@@ -65,7 +62,7 @@ steps:
     options: '--stacktrace --info --warning-mode all'
     publishJUnitResults: false
 
-# ✅ Run Espresso UI Tests (if you have devices/emulators)
+# Run Espresso UI Tests (if you have devices/emulators)
 # - task: Gradle@3
 #   inputs:
 #     workingDirectory: ''
@@ -85,14 +82,14 @@ steps:
   displayName: 'Run Unit Tests'
 
 
-# ✅ Copy APK to artifacts directory
+# Copy APK to artifacts directory
 - task: CopyFiles@2
   inputs:
     contents: '**/*.apk'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Copy APKs to artifacts'
 
-# ✅ Publish APK artifact
+# Publish APK artifact
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
@@ -100,7 +97,7 @@ steps:
     publishLocation: 'Container'
   displayName: 'Publish APK Artifact'
 
-# ✅ Upload APK to Firebase App Distribution
+# Upload APK to Firebase App Distribution
 - task: DownloadSecureFile@1
   name: downloadFirebaseCreds
   inputs:
